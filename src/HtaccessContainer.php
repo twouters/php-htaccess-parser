@@ -132,18 +132,18 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
         /** @var TokenInterface[] $array */
         $array = $this->getArrayCopy();
 
-        foreach ($array as $token) {
+        foreach ($array as $index => $token) {
             if ($token->getName() === $name) {
                 if ($type === null) {
-                    $result[] = $token;
+                    $result[$index] = $token;
                 }
                 if ($token->getTokenType() === $type) {
-                    $result[] = $token;
+                    $result[$index] = $token;
                 }
             }
             if ($token instanceof Block && $token->hasChildren() && $deepSearch) {
                 if (($res = $this->deepSearch($token, $name, $type)) !== null) {
-                    $result[] = $res;
+                    $result[$index] = $res;
                 }
             }
         }
@@ -156,18 +156,18 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
     private function deepSearch(Block $parent, $name, $type)
     {
         $result = [];
-        foreach ($parent as $token) {
+        foreach ($parent as $index => $token) {
             if ($token->getName() === $name) {
                 if ($type === null) {
-                    $result[] = $token;
+                    $result[$index] = $token;
                 }
                 if ($token->getTokenType() === $type) {
-                    $result[] = $token;
+                    $result[$index] = $token;
                 }
             }
             if ($token instanceof Block && $token->hasChildren()) {
                 if (($res = $this->deepSearch($token, $name, $type)) !== null) {
-                    $result[] = $res;
+                    $result[$index] = $res;
                 }
             }
         }

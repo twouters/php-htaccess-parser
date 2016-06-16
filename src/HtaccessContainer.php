@@ -123,47 +123,56 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
      * @param string $name [required] Name of the token
      * @param int $type [optional] TOKEN_DIRECTIVE | TOKEN_BLOCK
      * @param bool $deepSearch [optional] If the search should be multidimensional. Default is true
-     * @return null|TokenInterface Returns the Token or null if none is found
+     * @return null|array Returns an array of Tokens or null if none is found
      */
     public function search($name, $type = null, $deepSearch = true)
     {
+        $result = [];
+
         /** @var TokenInterface[] $array */
         $array = $this->getArrayCopy();
 
         foreach ($array as $token) {
             if ($token->getName() === $name) {
                 if ($type === null) {
-                    return $token;
+                    $result[] = $token;
                 }
                 if ($token->getTokenType() === $type) {
-                    return $token;
+                    $result[] = $token;
                 }
             }
             if ($token instanceof Block && $token->hasChildren() && $deepSearch) {
-                if ($res = $this->deepSearch($token, $name, $type)) {
-                    return $res;
+                if (($res = $this->deepSearch($token, $name, $type)) !== null) {
+                    $result[] = $res;
                 }
             }
+        }
+        if (count($result) > 0) {
+            return $result;
         }
         return null;
     }
 
     private function deepSearch(Block $parent, $name, $type)
     {
+        $result = [];
         foreach ($parent as $token) {
             if ($token->getName() === $name) {
                 if ($type === null) {
-                    return $token;
+                    $result[] = $token;
                 }
                 if ($token->getTokenType() === $type) {
-                    return $token;
+                    $result[] = $token;
                 }
             }
             if ($token instanceof Block && $token->hasChildren()) {
-                if ($res = $this->deepSearch($token, $name, $type)) {
-                    return $res;
+                if (($res = $this->deepSearch($token, $name, $type)) !== null) {
+                    $result[] = $res;
                 }
             }
+        }
+        if (count($result) > 0) {
+            return $result;
         }
         return null;
     }

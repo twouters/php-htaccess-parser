@@ -147,10 +147,7 @@ class HtaccessContainer extends BaseArrayObject implements HtaccessInterface
                 }
             }
         }
-        if (count($result) > 0) {
-            return $result;
-        }
-        return null;
+        return $result;
     }
 
     private function deepSearch(Block $parent, $name, $type)
